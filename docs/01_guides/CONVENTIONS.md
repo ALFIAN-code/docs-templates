@@ -36,18 +36,27 @@ Contoh: `feat: tambah filter periode di analytics`
 
 ## Pattern Wajib
 
-- [Misal: "Semua API response pakai wrapper `{success, data, message}`"]
-- [Misal: "Validasi input di layer service, bukan controller"]
-- [Misal: "Jangan hardcode string UI, pakai file `l10n/*.json`"]
+- **Page Shell & Navigation:** Halaman wajib dibungkus dengan `NdScaffold`, header menggunakan `NdAppBar`, tombol aksi di AppBar menggunakan `NdAppBarButton`, dan tombol aksi bawah halaman menggunakan `SharedBottomActionBarWidget`.
+- **Localization:** Semua teks UI wajib menggunakan helper localization `context.t('module.section.key')`, dilarang hardcode string literal di widget.
+- **Theme & Tokens:** Semua styling warna, spacing, dan radius wajib melalui `final t = NedoThemeData.of(context);` (akses `t.color*`, `t.spacing*`, `t.radius*`).
+- **Card Decoration:** Semua kontainer kartu/panel wajib menggunakan `decoration: t.cardDecoration(...)` dari `app_card_theme.dart`.
+- **API Response:** Semua API response menggunakan wrapper standar `{success, data, meta, error}` (lihat `02_reference/API_STYLE.md`).
+- **Clean Architecture:** Validasi dan logic bisnis di layer domain/service/usecases, bukan di widget presentation.
 
 ## Pattern yang Dilarang
 
-- [Misal: "Jangan pakai `any` di TypeScript"]
-- [Misal: "Jangan query langsung di widget Flutter, pakai provider/repository"]
+- **Dilarang memakai `Scaffold` atau `AppBar` dari `material.dart` langsung** di modul halaman — wajib gunakan `NdScaffold` dan `NdAppBar`.
+- **Dilarang membuat kontainer tombol manual** di AppBar actions — wajib gunakan `NdAppBarButton` agar styling seragam dengan tombol back.
+- **Dilarang hardcode teks UI mentah** (bahasa Indonesia/Inggris) langsung di widget — wajib gunakan `context.t(...)`.
+- **Dilarang hardcode warna** (`Color(0xFF...)` atau `Colors.blue`) di widget — wajib gunakan token tema `t.*`.
+- **Dilarang membuat `BoxDecoration` manual** untuk kartu — wajib `t.cardDecoration(...)`.
+- **Dilarang menduplikasi widget** hanya karena beda padding/warna — gunakan parameter varian (`type`/`variant`) atau parameter opsional.
+- **Dilarang logic bisnis di UI widget** — widget `presentation` hanya bertanggung jawab untuk render tampilan dan event handling.
+- **Dilarang query / call API langsung di widget presentation** — harus lewat repository/usecase melalui provider/bloc.
 
 ## Handling Error & Log
 
-- [Aturan log, misal: "pakai `logger.info` bukan `print`"]
+- Pakai `debugPrint` atau logger terpusat, dilarang meninggalkan `print()` di production code.
 
 ## Catatan untuk AI Agent
 

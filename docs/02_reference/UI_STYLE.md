@@ -10,51 +10,71 @@
 
 [1 kalimat: misal “Minimalis, clean, fokus ke readability, bukan playful”]
 
-## Design Tokens
+## Design Tokens (Nedo Theme Tokens)
 
-| Token | Nilai | Contoh pakai |
+Untuk project Flutter dengan Nedo Design System, seluruh styling wajib menggunakan accessor:
+```dart
+final t = NedoThemeData.of(context);
+```
+
+| Kategori Token | Akses via `t.*` | Kegunaan |
 |---|---|---|
-| Primary | `#1A73E8` | Button, link |
-| Secondary | `#34A853` | Success, badge |
-| Error | `#EA4335` | Validasi |
-| Background | `#FFFFFF` / `#F8F9FA` | |
-| Text | `#202124` | |
-| Radius | `8px` | Card, button |
-| Spacing | `4, 8, 16, 24` | Padding/margin kelipatan 8 |
+| **Primary/Brand** | `t.colorPrimary`, `t.colorBrandBlue` | Tombol utama, active state, indicator |
+| **State/Semantic** | `t.colorSuccess`, `t.colorWarning`, `t.colorError`, `t.colorInfo` | Badge status, alert, validasi |
+| **Surface/Background** | `t.colorSurface`, `t.colorSurfaceSubtle` | Latar belakang halaman & card |
+| **Text** | `t.colorText`, `t.colorTextSubtle`, `t.colorTextDisabled` | Hirarki keterbacaan teks |
+| **Border** | `t.colorBorder`, `t.colorBorderSubtle` | Divider dan outline |
+| **Spacing** | `t.spacingXs` (4), `t.spacingSm` (8), `t.spacingMd` (16), `t.spacingLg` (24), `t.spacingXl` (32) | Padding dan margin |
+| **Radius** | `t.radiusSm` (4), `t.radiusMd` (8), `t.radiusLg` (12), `t.radiusXl` (14), `t.radius3xl` (16), `t.radius4xl` (18-20) | Sudut melengkung card dan tombol |
 
-> Untuk Flutter: taruh di `lib/core/theme/app_colors.dart` dan `app_text_styles.dart`, jangan hardcode di widget.
+**Larangan:** Dilarang menggunakan warna mentah (`Color(0xFF...)` atau `Colors.blue`) langsung di widget — wajib menggunakan token `t.*`.
+
+## Kontainer Kartu — `t.cardDecoration` (Ambient Glow)
+
+Setiap kontainer card atau panel section **wajib menggunakan extension `cardDecoration`** dari `core/ui/theme/app_card_theme.dart`:
+
+```dart
+Container(
+  decoration: t.cardDecoration(radius: t.radius4xl), // atau t.cardDecoration()
+  child: ...,
+)
+```
+- **Karakteristik:** Menghasilkan efek *Ambient Glow* (dual-layer shadow lembut tanpa garis kaku), adaptif otomatis pada Light Mode dan Dark Mode.
+- **Hero Card:** Gunakan `t.heroAmbientGlowShadow` untuk hero card bergradien biru pekat.
 
 ## Typography
 
-| Style | Size | Weight | Pakai untuk |
-|---|---|---|---|
-| Display | 32 | Bold | Judul halaman |
-| Heading | 20 | SemiBold | Section |
-| Body | 14 | Regular | Konten |
-| Caption | 12 | Regular | Hint, meta |
+Gunakan ukuran dan bobot font terstandarisasi dari `t`:
+- Display / Page Title: `t.fontSize2xl` / `t.fontWeightBold`
+- Section Title: `t.fontSizeMd` (14-16) / `t.fontWeightBold`
+- Body Text: `t.fontSizeSm` (12-14) / `t.fontWeightRegular`
+- Caption / Meta / Badge: 10-11 / `t.fontWeightMedium` atau `t.fontWeightSemiBold`
 
-## Components
+## Components (Nedo UI & Shared)
 
-| Component | Library / File | Catatan |
+| Jenis Komponen | Komponen Resmi | Contoh / Catatan |
 |---|---|---|
-| Button | `lib/core/widgets/app_button.dart` | Primary, secondary, ghost |
-| Input | `app_text_field.dart` | Wajib pakai, jangan `TextField` mentah |
-| Card | `app_card.dart` | Radius 8, shadow light |
-| Empty state | `empty_view.dart` | |
-
-**Larangan:** Jangan pakai warna/font langsung di widget — harus lewat token di atas.
+| **Page Shell** | `NdScaffold` | Wrapper halaman wajib (bukan `Scaffold` Material). Properti: `appBar`, `body`, `bottomBar` |
+| **Top Navigation** | `NdAppBar`, `NdAppBarButton` | AppBar dengan title, subtitle, back button otomatis, dan actions via `NdAppBarButton` (44x44, radius 14) |
+| **Sticky Bottom Bar** | `SharedBottomActionBarWidget` | Footer bar di `NdScaffold.bottomBar` untuk slot status + tombol aksi bawah |
+| **Button** | `BpNedoButton`, `NedoIconButton` | Variant: `solid`, `outline`, `soft`. Color: `primary`, `neutral`, `destructive` |
+| **Form Input** | `BpNedoTextField`, `BpNedoDatePicker` | Wajib pakai, mendukung label, mandatory, & validator |
+| **Badge** | `BpNedoBadge` | Variant: `success`, `warning`, `destructive`, `info`. Style: `soft` |
+| **Feedback** | `NedoToast` | `NedoToast.success()`, `NedoToast.error()`, `NedoToast.info()` |
+| **Icon** | `NedoIcon`, `NedoIcons.*` | Standard icon set dari library |
+| **Shared Widgets** | `lib/modules/shared/presentation/widgets/` | `SharedFileAttachmentCardWidget`, `SharedStudentMemberListCard`, dll |
 
 ## Icons & Assets
 
-- Icons: [Material Icons / Lucide / Custom]
-- Images: `assets/images/`, daftarkan di `pubspec.yaml` (Flutter) atau `public/` (Next.js)
-
-## Responsive / Platform
-
-- Breakpoint (web): `mobile <768, tablet <1024, desktop >=1024`
-- Flutter: handle `MediaQuery`, jangan hardcode width 360.
+- Icons: `NedoIcon(NedoIcons.[nama_ikon], size: 16-18, color: t.colorText)`
+- Images: `assets/images/`, daftarkan di `pubspec.yaml`
 
 ## Catatan untuk AI Agent
 
-- Sebelum buat widget baru, cek `00_overview/STACK.md` dan file ini — pakai token & component yang sudah ada.
-- Jika butuh warna/component baru, usulkan update ke file ini dulu (L1: tanya), jangan langsung hardcode.
+- Selalu gunakan `final t = NedoThemeData.of(context);`.
+- Semua halaman wajib dibungkus `NdScaffold` + `NdAppBar` (dilarang pakai `Scaffold`/`AppBar` Material langsung).
+- Tombol aksi di AppBar wajib menggunakan `NdAppBarButton` (seragam dengan tombol back).
+- Tombol aksi di bawah halaman wajib menggunakan `SharedBottomActionBarWidget`.
+- Semua card wajib menggunakan `t.cardDecoration(...)`.
+- Semua teks UI wajib dibungkus `context.t('key.path')` (lokalisasi).
+- Sebelum membuat widget baru, cek `lib/modules/shared/presentation/widgets/` terlebih dahulu untuk menghindari duplikasi.

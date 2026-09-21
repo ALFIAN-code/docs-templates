@@ -119,20 +119,113 @@ Jika ubah model `freezed`/`json_serializable`, wajib `build_runner` dan commit `
 - Jika butuh variant baru, update `02_reference/UI_STYLE.md` sekalian (L1: tanya dulu).
 - Larangan: jangan hardcode warna/font/radius di widget — harus lewat token. Jangan copy-paste 1 widget jadi 2 file hanya karena beda padding. Cek `lib/modules/shared/presentation/widgets/` dulu.
 
-### 3. Jika Project Pakai Custom Library
+### 3. Jika Project Pakai Custom Library (Nedo UI & nedo_mobile_core)
 
-- Banyak project Flutter kamu pakai **custom library internal** (misal `packages/custom_lib/` atau package lokal di `pubspec.yaml` dengan `path:` / `git:`).
-- Sebelum develop, **cek dulu tools & UI component di library tersebut**:
+- Project Flutter ini menggunakan **Nedo Design System & Core Library** (`nedo_mobile_core` / `packages/nedo-library`):
+  - **Komponen Form & Tombol:** Gunakan `BpNedoButton`, `NedoIconButton`, `BpNedoTextField`, `BpNedoDatePicker`, `BpNedoBadge`.
+  - **Ikon & Feedback:** Gunakan `NedoIcon`, `NedoIcons.*`, `NedoToast.success()`, `NedoToast.error()`, `NedoToast.info()`.
+  - **Layout & Scaffold:** Gunakan `NdScaffold`, `NdAppBar`.
+- Sebelum membuat widget UI baru, **cek dulu komponen Nedo dan shared widget** yang tersedia di:
   ```bash
-  ls packages/custom_lib/lib/src/widgets/ 2>/dev/null || ls lib/custom_lib/ 2>/dev/null
-  cat pubspec.yaml | grep -A 5 custom
+  ls lib/modules/shared/presentation/widgets/
   ```
-- Utamakan pakai widget/util dari custom library daripada buat dari nol.
-- Jika project custom library **tidak tersedia di workspace AI** (tidak ada folder/file-nya), **jangan asumsi**. Tanya developer:
-  > “Project custom library tidak ditemukan di workspace. Bisa tunjukkan path-nya atau izinkan saya akses? Saya tidak akan buat duplikat component sebelum konfirmasi.”
-- Jika diizinkan, baca `00_overview/STACK.md` bagian custom library untuk lokasi yang benar dan catat di `03_logs/DECISIONS.md` jika ada keputusan pakai/tidak pakai library tersebut.
+- Utamakan menggunakan atau memperluas widget dari `lib/modules/shared/presentation/widgets/` (seperti `SharedFileAttachmentCardWidget`, `SharedStudentMemberListCard`, `SharedSectionHeaderWidget`, `SharedProgressBarWidget`, `SharedTimelineWidget`).
+- Jika library internal tidak tersedia langsung di workspace AI, tanyakan akses kepada developer alih-alih membuat duplikat komponen dari nol.
 
-### 4. Clean Code — Wajib
+### 4. Standarisasi Kontainer Kartu — Wajib `t.cardDecoration`
+
+- **Dilarang keras** membuat `BoxDecoration` manual untuk kartu (`color: Colors.white`, `boxShadow: [BoxShadow(...)]`).
+- Setiap kartu / panel / kontainer section **wajib menggunakan extension `cardDecoration`** dari:
+  ```dart
+  import 'package:your_app/core/ui/theme/app_card_theme.dart';
+  ```
+- Format pemakaian:
+  ```dart
+  final t = NedoThemeData.of(context);
+
+  Container(
+    decoration: t.cardDecoration(radius: t.radius4xl), // atau t.cardDecoration() untuk default radius
+    child: ...,
+  )
+  ```
+- **Karakteristik `cardDecoration`:**
+  - Menghasilkan efek *Ambient Glow* (dual-layer shadow: perimeter contact shadow halus + ambient brand glow yang menyebar lembut).
+  - Otomatis adaptif Light Mode dan Dark Mode (`t.colorSurface` + `t.shadowSm`).
+  - Untuk hero section bergradien gelap, tersedia `t.heroAmbientGlowShadow`.
+
+### 5. Design Tokens & Theme Accessor (`NedoThemeData` / `t.*`)
+
+- Seluruh styling warna, jarak, font, dan radius **wajib menggunakan token tema**:
+  ```dart
+  final t = NedoThemeData.of(context);
+  ```
+- **Aturan Token:**
+  - **Warna:** `t.colorBrandBlue`, `t.colorSurfaceSubtle`, `t.colorText`, `t.colorTextSubtle`, `t.colorBorderSubtle`, `t.colorInfo`, `t.colorError`, `t.colorSuccess`.
+  - **Spacing:** `t.spacingXs` (4), `t.spacingSm` (8), `t.spacingMd` (16), `t.spacingLg` (24), `t.spacingXl` (32).
+  - **Radius:** `t.radiusSm`, `t.radiusMd`, `t.radiusLg`, `t.radiusXl`, `t.radius3xl`, `t.radius4xl`.
+  - **Tipografi & Weight:** `t.fontSizeSm`, `t.fontWeightMedium`, `t.fontWeightBold`, dll.
+- **Larangan Keras:** Dilarang meletakkan warna mentah seperti `Color(0xFF...)` atau `Colors.blue` langsung di widget. Semua wajib lewat token `t.*`.
+
+### 6. Standarisasi Localization — Wajib `context.t(...)`
+
+- **Dilarang keras menulis *hardcoded string* (teks mentah)** di widget UI.
+- Semua teks UI (judul, subtitle, label form, placeholder, button, dialog, status toast) **wajib menggunakan helper localization**:
+  ```dart
+  context.t('ojt.form.coverLetter.title')
+  context.t('ojt.home.nextActionTitle')
+  ```
+- **Jika key belum ada di dictionary:**
+  - Daftarkan key baru secara rapi dan modular ke file lokalisasi bahasa (`l10n/` atau localization provider).
+  - Ikuti hierarki penamaan: `[modul].[halaman_atau_fitur].[nama_elemen]`.
+
+### 7. Konsistensi Page Shell — Wajib `NdScaffold`, `NdAppBar`, `NdAppBarButton`, & `BottomBar`
+
+Hindari penggunaan widget shell dari `material.dart` langsung di modul. Gunakan arsitektur wrapper terstandarisasi:
+
+- **Page Scaffold (`NdScaffold`):**
+  - Semua halaman fitur/modul **wajib dibungkus dengan `NdScaffold`** dari:
+    ```dart
+    import 'package:your_app/modules/shared/presentation/widget/nedo_ui/nd_scaffold.dart';
+    ```
+  - **Dilarang menggunakan `Scaffold` bawaan `material.dart`** langsung di modul persona.
+  - Parameter standar: `backgroundColor: t.colorSurfaceSubtle`, `appBar: NdAppBar(...)`, `body: ...`, `bottomBar: ...`.
+
+- **Top Navigation (`NdAppBar`):**
+  - **Wajib menggunakan `NdAppBar`** dari `lib/modules/shared/presentation/widget/nedo_ui/nd_app_bar.dart` (bukan `AppBar` bawaan Material).
+  - Mendukung `title` terintegrasi dan `subtitle` opsional (misal nama perusahaan, periode semester, atau status):
+    ```dart
+    appBar: NdAppBar(
+      title: context.t('ojt.form.coverLetter.title'),
+      subtitle: context.t('ojt.form.coverLetter.subtitle'),
+      actions: [ ... ],
+    )
+    ```
+  - Tombol kembali (*back button*) otomatis aktif dengan styling rounded 44x44 dan border subtle yang seragam.
+
+- **Tombol Aksi di AppBar (`NdAppBarButton`):**
+  - Setiap tombol aksi pada `actions` di `NdAppBar` **wajib menggunakan `NdAppBarButton`**:
+    ```dart
+    NdAppBarButton(
+      icon: NedoIcon(NedoIcons.document, size: 18, color: t.colorText),
+      onPressed: _saveDraft,
+    )
+    ```
+  - **Larangan:** Dilarang membuat kontainer kotak custom manual dengan border/radius sembarangan untuk tombol aksi di AppBar. Semua tombol leading dan actions harus proporsional (44x44, radius 14, background `colorSurface`, border `colorBorderSubtle`).
+
+- **Sticky Footer & Action Bar (`SharedBottomActionBarWidget`):**
+  - Untuk halaman form, detail, review, atau wizard yang memiliki tombol aksi di bagian bawah, **wajib menggunakan `SharedBottomActionBarWidget`** pada parameter `bottomBar` di `NdScaffold`:
+    ```dart
+    bottomBar: SharedBottomActionBarWidget(
+      stat: const SizedBox.shrink(), // atau info status/teks ringkasan
+      actions: [
+        BpNedoButton(label: 'Simpan draf', variant: BpNedoButtonVariant.outline, color: BpNedoButtonColor.neutral, onPressed: _saveDraft),
+        BpNedoButton(label: 'Ajukan', color: BpNedoButtonColor.primary, onPressed: _submit),
+      ],
+    )
+    ```
+  - Widget ini sudah adaptif terhadap keyboard inset, safe area bawah, dan *auto-stack* vertikal jika layar sempit.
+
+### 8. Clean Code — Wajib
 
 - Ikuti `01_guides/CONVENTIONS.md` + prinsip clean code:
   - 1 function / widget = 1 tanggung jawab, maksimal ~50 baris. Jika lebih, pecah jadi widget/function kecil.
@@ -145,8 +238,13 @@ Jika ubah model `freezed`/`json_serializable`, wajib `build_runner` dan commit `
 ## Checklist Sebelum Selesai
 
 - [ ] `flutter analyze` tanpa warning/error? (wajib, lihat Aturan 1)
-- [ ] UI pakai component reusable & sudah cek `lib/modules/shared/presentation/widgets/` + custom_lib? (Aturan 2 & 3)
-- [ ] Tidak ada duplikasi widget & sudah pakai token dari `02_reference/UI_STYLE.md`? Variant baru pakai `type`/param, tidak duplikasi file?
+- [ ] Page Shell & AppBar konsisten? (Wajib pakai `NdScaffold`, `NdAppBar`, dan `NdAppBarButton` di actions; bebas `Scaffold`/`AppBar` Material langsung)
+- [ ] Sticky Bottom Bar menggunakan `SharedBottomActionBarWidget` untuk aksi bawah halaman?
+- [ ] Card menggunakan `t.cardDecoration(...)` dari `app_card_theme.dart`? (Bebas `BoxDecoration` manual)
+- [ ] Design Tokens dipatuhi via `t = NedoThemeData.of(context)`? (Bebas `Color(0xFF...)` mentah; pakai `t.color*`, `t.spacing*`, `t.radius*`)
+- [ ] Localization dipatuhi via `context.t(...)`? (Bebas *hardcoded string* pada semua teks UI)
+- [ ] UI pakai component Nedo (`BpNedo*`, `Nd*`) & reusable shared widgets? (Sudah cek `lib/modules/shared/presentation/widgets/` sebelum buat baru)
+- [ ] Tidak ada duplikasi widget? (Variant baru via parameter `type`/`variant`, bukan copy-paste file baru)
 - [ ] Clean Architecture layer dipatuhi? (`presentation` tidak ada logic bisnis, clean di leaf `data/domain/presentation`)
 - [ ] `dart format` sudah?
 - [ ] Jika model baru, `build_runner` sudah?
