@@ -20,6 +20,17 @@
 | Tabel DB | `snake_case`, plural | `users`, `order_items` |
 | Kolom DB | `snake_case` | `created_at` |
 
+## Dokumentasi & Log
+
+- `docs/03_logs/PROGRESS_LOG.md` bersifat **append-only**: tambah entry baru di paling atas, jangan pernah edit/timpa entry lama.
+- Setiap entry wajib dua baris identitas dari mesin, bukan dari ingatan:
+  - stamp `## [YYYY-MM-DD HH:mm]` dari `date "+%Y-%m-%d %H:%M"`.
+  - baris `**Kontributor:**` dari `git config user.name`.
+- Ambil keduanya dalam satu perintah bash: `date "+%Y-%m-%d %H:%M"; git config user.name`.
+- Dilarang menyalin stamp/kontributor dari entry sebelumnya.
+- Laporan progress untuk stakeholder disusun dari **gabungan** `PROGRESS_LOG.md` (konteks fitur) + `git log` (atribusi siapa), bukan salah satu saja.
+- Format laporan progress ke stakeholder: satu list, tiap baris diawali prefix fitur `[Nama Fitur]`, bahasa non-teknis, tanda `✅` untuk selesai di atas dan `⏳` untuk pending di bawah. Jangan tulis "selesai" yang duplikat `✅`.
+
 ## Format & Lint
 
 - Formatter: [isi, misal: `dart format`, `prettier`, `php-cs-fixer`]

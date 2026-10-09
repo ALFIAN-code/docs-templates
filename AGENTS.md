@@ -69,16 +69,23 @@ Agent **tidak boleh** klaim selesai tanpa update di atas.
 
 **Checklist sebelum close sesi:**
 - [ ] `03_logs/PROGRESS_LOG.md` entry baru di paling atas?
+- [ ] Stamp tanggal entry == tanggal hari ini (hasil `date`)?
+- [ ] Baris `**Kontributor:**` ada dan nilainya hasil `git config user.name`?
 - [ ] `00_overview/ARCHITECTURE.md` atau `docs/modules/*` sinkron?
 - [ ] `00_overview/STATE.md` diupdate?
 - [ ] Tidak ada file `docs/` yang basi?
 
 ## 4. Format Entry `PROGRESS_LOG.md`
 
+> ANTI-TANGGAL-PALSU: stamp tanggal **wajib** diambil dari `date "+%Y-%m-%d %H:%M"` sebelum menulis entry.
+> Dilarang menebak tanggal dari chat, memori, atau menyalin stamp entry lama (insiden: puluhan entry dengan
+> tanggal/jam identik muncul karena copy-paste header).
+
 Tambahkan entry baru di **paling atas** (setelah heading), format:
 
 ```
 ## [YYYY-MM-DD HH:mm] Judul singkat task
+**Kontributor:** <hasil `git config user.name`>
 **Status:** Selesai / Sebagian / Blocked
 **Dikerjakan:**
 - poin 1
@@ -91,6 +98,21 @@ Tambahkan entry baru di **paling atas** (setelah heading), format:
 **Catatan/masalah:**
 - poin
 ```
+
+### Aturan Kontributor (WAJIB)
+
+> INSIDEN: `PROGRESS_LOG.md` lama tidak mencatat siapa yang mengerjakan, sehingga laporan progress harian tidak
+> bisa diatribusi ke orang yang benar.
+
+1. Setiap entry **baru** wajib punya baris `**Kontributor:**` tepat setelah judul.
+2. Nilainya diambil dari `git config user.name` — **dilarang** menebak dari chat, memori, atau `git log` commit lama.
+3. Ambil `date "+%Y-%m-%d %H:%M"` dan `git config user.name` **dalam satu perintah bash** agar konsisten.
+4. Kalau `git config user.name` kosong (project belum di-git), tulis `git config user.name` di dalam baris itu agar
+   jelas initiatornya konfigurasi, bukan asal menebak nama.
+5. **Jangan** mengedit entry lama untuk menambahkan `**Kontributor:**` — log bersifat append-only. Atribusinya diambil
+   dari `git log` saat menyusun laporan progress.
+6. Laporan progress harian **wajib** menggabungkan dua sumber: `03_logs/PROGRESS_LOG.md` (konteks fitur) + `git log`
+   (kontributor). Bukan salah satu saja.
 
 ## 5. Larangan
 
