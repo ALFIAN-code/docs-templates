@@ -2,7 +2,7 @@
 
 **Induk modul:** [Dashboard](./README.md)
 **Terakhir diupdate:** [YYYY-MM-DD]
-**Lokasi kode:** `lib/features/dashboard/users/` atau `src/modules/dashboard/users/`
+**Lokasi kode:** `lib/modules/dashboard/users/` atau `src/modules/dashboard/users/`
 **API terkait:** `GET /users`, `POST /users`, `PATCH /users/:id`
 
 ## Fungsi

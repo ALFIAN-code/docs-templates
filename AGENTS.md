@@ -158,9 +158,9 @@ Saat init `docs/`:
 
 1. **Baca dulu** `docs/stacks/[terpilih].md` di template bagian **“Kebutuhan Dokumen”** (tabel Wajib/Opsional).
 2. **Hanya copy file yang `Wajib = Ya`** untuk tipe stack tersebut.
-   - Contoh Flutter (`frontend`): `00_overview/*`, `01_guides/*`, `03_logs/*`, `02_reference/API_REFERENCE.md`, `02_reference/API_STYLE.md`, `modules/_template.md` → **jangan copy** `02_reference/DATABASE_SCHEMA.md` dan `02_reference/SECURITY_AND_DATA.md` kecuali user minta.
+   - Contoh Flutter (`frontend`): `00_overview/*`, `01_guides/*`, `03_logs/*`, `02_reference/API_REFERENCE.md`, `02_reference/API_STYLE.md`, `02_reference/UI_STYLE.md`, `modules/_template.md` → **jangan copy** `02_reference/DATABASE_SCHEMA.md` dan `02_reference/SECURITY_AND_DATA.md` kecuali user minta.
    - Contoh Moodle (`backend`): semua `02_reference/*` wajib termasuk `DATABASE_SCHEMA.md`.
-3. **File `Opsional`** → tanya user: “`UI_STYLE.md` belum ada, mau saya buatkan? Ini untuk design system.” Jangan langsung buat.
+3. **File `Opsional`** → tanya user: “`WORKFLOW.md` belum ada, mau saya buatkan?” Jangan langsung buat.
 4. **Jika stack baru** (tidak ada di template) → tentukan `tipe: frontend/backend/fullstack` dari codebase, lalu pakai rule fallback di `docs/stacks/_template.md`. Tetap konfirmasi ke user.
 5. **Folder `stacks/` tidak di-copy ke project.** Hanya 1 file stack yang terpilih di-merge jadi `docs/00_overview/STACK.md`. Jadi project Flutter tidak akan punya `moodle.md` di dalamnya.
 
@@ -194,3 +194,38 @@ Setiap project hasil init punya 1 file: `docs/00_overview/STACK.md` (bukan `docs
 Jika 1 fitur punya sub-grouping lagi (misal `dashboard > analytics > filter-periode`), pakai `#### Sub-fitur` di dalam file fitur — jangan nesting folder >2 level.
 
 **Alur AI:** Dapat task “buat fitur X di dashboard” → baca `docs/modules/dashboard/README.md` dulu. Jika belum ada → tanya mau dibikinkan dari `modules/_template.md`?
+
+---
+
+## 10. Diskusi Arsitektur & Design System (WAJIB)
+
+> Untuk project greenfield (dibangun dari nol), **mayoritas waktu di工作是 diskusi, bukan ngoding**. Aturan bagian 1-3 mengatur pekerjaan kode; bagian ini mengatur **sesi diskusi**.
+
+### Konvensi Status (dipakai konsisten di seluruh `docs/`)
+
+| Status | Arti | Boleh dipakai? |
+|---|---|---|
+| `✅ Ratified` | Sudah disepakati | Ya, tanpa tanya lagi |
+| `🟡 Draft` | Sedang dibahas / hipotesa | **Jangan** — konfirmasi dulu |
+| `❌ Not doing` | Disengaja tidak dibuat | Jangan usulkan ulang |
+
+### Aturan
+
+1. **Update dokumen di turn yang sama.** Setiap keputusan arsitektur/design yang sudah disepakati → langsung edit dokumen yang relevan, jangan tunggu sesi selesai. Ini **mekanisme ingatannya**: dokumen = ingatan, bukan catatan panjang dari chat.
+2. **Pemetaan diskusi → dokumen:**
+
+   | Yang dibahas | Update di |
+   |---|---|
+   | Struktur folder, boundary modul, alur data, non-goals | `00_overview/ARCHITECTURE.md` |
+   | State management, DI, routing, library, versi | `00_overview/STACK.md` |
+   | Token warna/tipe/spacing, component, a11y | `02_reference/UI_STYLE.md` |
+   | Detail implementasi tiap component | `docs/modules/design-system/README.md` |
+   | Alasan di balik keputusan penting | `03_logs/DECISIONS.md` (ADR) |
+   | Pertanyaan yang belum terjawab | **Open Threads** di dokumen yang sedang dibahas |
+
+3. **Keputusan penting → ADR.** Tulis di `DECISIONS.md` di turn yang sama, status `Proposed` dulu kalau belum dikonfirmasi user.
+4. **Pertanyaan yang belum terjawab → "Open Threads"**, jangan dibiarkan hilang. Lokasi: `ARCHITECTURE.md`, `UI_STYLE.md`, atau `modules/[nama]/README.md` — sesuai yang sedang dibahas.
+5. **Sebelum mengusulkan pendekatan, cek dulu Open Threads + `DECISIONS.md`.** Jangan propose ulang sesuatu yang sudah dibahas lalu ditolak.
+6. **Update "Fase desain"** di `ARCHITECTURE.md` dari `🟡 Draft` ke `✅ Ratified` begitu keputusan kunci sudah disepakati. Jangan bangun implementasi berat di atas `🟡 Draft`.
+7. **Diskusi yang tidak menghasilkan keputusan konkret → tidak perlu dokumen.** Ini yang menjaga `docs/` tetap bisa dibaca.
+8. **Preferensi yang berulang jadi aturan.** Kalau user menolak suatu pendekatan lebih dari sekali, tulis di `01_guides/CONVENTIONS.md` sebagai aturan project — bukan hanya tercatat di log.

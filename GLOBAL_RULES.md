@@ -5,26 +5,32 @@
 
 ## 1. Opencode
 
-**Lokasi:** `~/.config/opencode/AGENTS.md` (sudah terpasang, perlu update ke v3)
+**Lokasi:** `~/.config/opencode/AGENTS.md` (terpasang, v3 + Default Stack Flutter + section Diskusi Arsitektur)
 
-File global opencode akan saya update otomatis ke versi v3 di bawah.
+## 2. Antigravity
 
-## 2. Codex
+**Lokasi:** `~/.gemini/AGENTS.md` (terpasang, mirror dari Opencode)
 
-**Lokasi:** `~/.codex/AGENTS.md` (sudah terpasang, perlu update ke v3)
+> Jangan taruh rules bersama di `~/.gemini/GEMINI.md` — file itu dipakai bersama dengan
+> Gemini CLI dan bisa konflik. Rules utama tetap di `AGENTS.md`.
+
+## 3. Codex
+
+**Lokasi:** `~/.codex/AGENTS.md` (terpasang, perlu update ke v3)
 
 ## Apa yang berubah di v3?
 
 - `docs/` sekarang grouped: `00_overview/`, `01_guides/`, `02_reference/`, `03_logs/`, `modules/`
 - `AGENTS.md` pindah ke **root project**, bukan `docs/`
 - `STACK.md` sekarang di `00_overview/STACK.md` (merge 1 stack saja, folder `stacks/` tidak ke-copy)
-- Style guide ada di `02_reference/API_STYLE.md` (wajib frontend) + `UI_STYLE.md` (opsional)
+- Style guide ada di `02_reference/API_STYLE.md` (wajib frontend) + `UI_STYLE.md` (wajib frontend — kontrak design system)
 - **AI dilarang copy semua file mentah** — wajib cek manifest di `stacks/*.md` (Wajib/Opsional)
 
 ## Verifikasi setelah update
 
 ```bash
 cat ~/.config/opencode/AGENTS.md | head -n 30
+cat ~/.gemini/AGENTS.md | head -n 30
 cat ~/.codex/AGENTS.md | head -n 30
 ls -R /Users/allvvnt/alfianSpace/files/agent-docs-template-v3/docs
 ```

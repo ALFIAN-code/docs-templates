@@ -19,13 +19,13 @@
 | 01_guides | `WORKFLOW.md` | Opsional | tanya, tim kecil tidak perlu |
 | 02_reference | `API_REFERENCE.md` | Ya | **fokus utama frontend**: daftar endpoint yang di-consume |
 | 02_reference | `API_STYLE.md` | Ya | **wajib**: wrapper `success/data/meta`, pagination, error style |
-| 02_reference | `UI_STYLE.md` | Opsional | tanya: “Butuh design system? Jika ya, buatkan.” |
+| 02_reference | `UI_STYLE.md` | Ya | **design system butuh kontrak token tertulis**; tanpa ini tiap sesi rebuild dari ingatan dan hasilnya tidak konsisten |
 | 02_reference | `DATABASE_SCHEMA.md` | Tidak | frontend tidak pegang DB langsung. Jika butuh (offline cache/Isar/Hive), tanya dulu |
 | 02_reference | `SECURITY_AND_DATA.md` | Opsional | hanya jika ada SecureStorage/token handling sensitif |
 | modules | `modules/_template.md` | Ya | template per fitur |
 | modules | `modules/dashboard/` contoh | Tidak | jangan copy contoh dashboard ke project baru, mulai kosong |
 
-**Ringkasan untuk AI:** Flutter = frontend → `02_reference` fokus ke `API_*` + `UI_STYLE`, bukan `DATABASE_SCHEMA`. Jangan buat file DB tanpa konfirmasi.
+**Ringkasan untuk AI:** Flutter = frontend → `02_reference` fokus ke `API_*` + `UI_STYLE.md` (keduanya Wajib), bukan `DATABASE_SCHEMA`. Jangan buat file DB tanpa konfirmasi. `UI_STYLE.md` = kontrak token; detail component ada di `modules/design-system/`.
 
 ---
 

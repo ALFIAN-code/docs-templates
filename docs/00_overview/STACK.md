@@ -36,7 +36,7 @@
 | 01_guides | WORKFLOW.md | Opsional |
 | 02_reference | API_REFERENCE.md | Ya |
 | 02_reference | API_STYLE.md | Ya (frontend) / Ya (backend, style beda) |
-| 02_reference | UI_STYLE.md | Opsional (hanya frontend) |
+| 02_reference | UI_STYLE.md | Ya (frontend) — kontrak design system |
 | 02_reference | DATABASE_SCHEMA.md | Tidak (frontend) / Ya (backend) |
 | 02_reference | SECURITY_AND_DATA.md | Opsional (frontend) / Ya (backend) |
 | 03_logs | PROGRESS_LOG, DECISIONS, CHANGELOG | Ya |

@@ -2,7 +2,7 @@
 
 **Induk modul:** [Dashboard](./README.md)
 **Terakhir diupdate:** [YYYY-MM-DD]
-**Lokasi kode:** `lib/features/dashboard/analytics/`
+**Lokasi kode:** `lib/modules/dashboard/analytics/`
 **API terkait:** `GET /dashboard/analytics`
 
 ## Fungsi

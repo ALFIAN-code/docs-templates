@@ -20,9 +20,16 @@ docs/
 |---|---|---|---|
 | **`00_overview/`** | `ARCHITECTURE.md` (index), `STATE.md` (ringkasan 1 hal), `STACK.md` (aturan stack terpilih) | Tiap sesi, selalu | Manusia + AI |
 | **`01_guides/`** | `GETTING_STARTED.md`, `CONVENTIONS.md`, `GLOSSARY.md`, `WORKFLOW.md` | Onboarding / mau tau aturan nulis | Manusia, AI saat awal |
-| **`02_reference/`** | `API_REFERENCE.md`, `API_STYLE.md`, `UI_STYLE.md`, `DATABASE_SCHEMA.md`, `SECURITY_AND_DATA.md` | Saat bikin/consume API, DB, UI | Dev + AI saat coding |
-| **`03_logs/`** | `PROGRESS_LOG.md`, `DECISIONS.md`, `CHANGELOG.md` | Tiap sesi & saat cari histori keputusan | AI wajib, manusia saat review |
-| **`modules/`** | `modules/[nama]/README.md` + `[fitur].md` | Saat kerjakan fitur di modul itu | Dev + AI |
+| **`02_reference/`** | `API_REFERENCE.md`, `API_STYLE.md`, `UI_STYLE.md` (kontrak design system), `DATABASE_SCHEMA.md`, `SECURITY_AND_DATA.md` | Saat bikin/consume API, DB, UI | Dev + AI saat coding |
+| **`03_logs/`** | `PROGRESS_LOG.md`, `DECISIONS.md` (ADR), `CHANGELOG.md` | Tiap sesi & saat cari histori keputusan | AI wajib, manusia saat review |
+| **`modules/`** | `modules/[nama]/README.md` + `[fitur].md`, incl. `design-system/` | Saat kerjakan fitur di modul itu | Dev + AI |
+
+> **Untuk greenfield (bangun dari nol):** sebagian besar keputusanmu diambil saat berdiskusi,
+> bukan saat ngoding. Setiap keputusan arsitektur/design harus **langsung ditulis** ke dokumen
+> terkait di turn yang sama — dokumen itulah yang jadi "ingatan" antar sesi. Lihat `AGENTS.md:10`.
+>
+> Cara yang paling sering hilang: **Open Threads** — pertanyaan arsitektur yang belum dijawab.
+> Pindahkan yang sudah diputuskan ke tabel keputusan, jangan biarkan menggantung.
 
 ## Cara Pakai untuk Manusia
 

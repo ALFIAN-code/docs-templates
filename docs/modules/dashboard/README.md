@@ -2,7 +2,7 @@
 
 **Terakhir diupdate:** [YYYY-MM-DD]
 **Status:** Contoh — hapus file ini jika tidak pakai dashboard, atau ganti jadi modul kamu
-**Lokasi kode:** `lib/features/dashboard/` (Flutter) / `src/modules/dashboard/` (web)
+**Lokasi kode:** `lib/modules/dashboard/` (Flutter) / `src/modules/dashboard/` (web)
 **Dependencies:** `auth`, `api`
 **Dependents:** -
 
@@ -23,7 +23,7 @@ Dashboard adalah halaman utama setelah login. Menampilkan ringkasan data dan nav
 ## Fitur: Ringkasan (contoh fitur yang masih di README)
 
 - **Fungsi:** Menampilkan 4 card statistik (total user, transaksi hari ini, dll)
-- **Lokasi:** `lib/features/dashboard/widgets/summary_cards.dart`
+- **Lokasi:** `lib/modules/dashboard/widgets/summary_cards.dart`
 - **Flow:** `DashboardPage` → `SummaryProvider` → `GET /dashboard/summary` → render cards
 - **Catatan:** Data di-cache 5 menit, lihat `CONVENTIONS.md` bagian cache.
 

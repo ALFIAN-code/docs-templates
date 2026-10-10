@@ -11,7 +11,7 @@
 
 [1-2 paragraf: modul ini ngapain, untuk siapa, kenapa dipisah jadi modul sendiri]
 
-**Lokasi kode:** `src/modules/[nama]/` atau `lib/features/[nama]/` (sesuai stack)
+**Lokasi kode:** `lib/modules/[nama]/` (Flutter) atau `src/modules/[nama]/` — ikut `00_overview/STACK.md`, jangan bikin `lib/features/` atau `lib/src/`
 **Dependencies:** [modul lain yang dipakai, misal: `auth`, `payment`]
 **Dependents:** [modul lain yang memakai modul ini]
 
@@ -52,6 +52,15 @@
 | Variable / Config | Fungsi | Wajib? |
 |---|---|---|
 | | | |
+
+## Open Threads (Belum Selesai)
+
+> Pertanyaan desain fitur ini yang masih dibahas. **AI WAJIB cek sebelum mengusulkan
+> pendekatan** — kalau sudah tertulis di sini berarti belum diputuskan, tanyakan dulu.
+> Item yang sudah diputuskan pindah ke `DECISIONS.md` (ADR) lalu hapus dari sini.
+
+- [ ] [misal: form validasi — validate on blur atau on submit?]
+- [ ] [misal: pagination modul ini — infinite scroll atau page-based?]
 
 ## Catatan Penting untuk AI Agent
 

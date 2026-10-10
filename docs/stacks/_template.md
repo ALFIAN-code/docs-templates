@@ -19,14 +19,14 @@ Tentukan Wajib/Opsional/Tidak sesuai tipe:
 | 01_guides | `WORKFLOW.md` | Opsional | tanya |
 | 02_reference | `API_REFERENCE.md` | [Ya/Tidak] | |
 | 02_reference | `API_STYLE.md` | [Ya/Opsional] | |
-| 02_reference | `UI_STYLE.md` | [Opsional/Tidak] | hanya frontend |
+| 02_reference | `UI_STYLE.md` | [Ya/Tidak] | **wajib** untuk frontend — kontrak token design system |
 | 02_reference | `DATABASE_SCHEMA.md` | [Ya/Tidak] | wajib untuk backend |
 | 02_reference | `SECURITY_AND_DATA.md` | [Ya/Opsional/Tidak] | |
 | modules | `modules/_template.md` | Ya | |
 
 **Fallback untuk AI jika tipe tidak dikenal:**
 
-- `frontend` (Next.js, Vue, React, Flutter) → ikut rule `flutter.md`: `API_*` Wajib, `UI_STYLE` Opsional, `DATABASE_SCHEMA` Tidak.
+- `frontend` (Next.js, Vue, React, Flutter) → ikut rule `flutter.md`: `API_*` + `UI_STYLE.md` Wajib, `DATABASE_SCHEMA` Tidak.
 - `backend` (Laravel, Express, Moodle, Go) → ikut rule `moodle.md`: `DATABASE_SCHEMA` Wajib, `SECURITY_AND_DATA` Wajib, `UI_STYLE` Tidak.
 - `fullstack` → semua `02_reference/*` Wajib.
 - Jika ragu → **tanya user**: “Ini frontend atau backend? Mau saya buatkan DATABASE_SCHEMA.md juga?”
